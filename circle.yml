@@ -21,13 +21,13 @@ dependencies:
     - if [[ -e "$WEAVE_BUILD" ]]; then
         docker load -i $WEAVE_BUILD;
       else
-        docker pull weaveworks/weave-build;
-        mkdir -p $(dirname "$WEAVE_BUILD");
+        docker build -t weaveworks/weave-build build
+        mkdir -p $(dirname $WEAVE_BUILD)
         docker save weaveworks/weave-build >$WEAVE_BUILD;
       fi
   post:
-    - curl https://sdk.cloud.google.com | bash
-    - bin/setup-circleci-secrets "$SECRET_PASSWORD"
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then curl https://sdk.cloud.google.com | bash; fi
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then bin/setup-circleci-secrets "$SECRET_PASSWORD"; fi
     - mkdir -p $(dirname $SRCDIR)
     - cp -r $(pwd)/ $SRCDIR
 
@@ -35,12 +35,13 @@ test:
   override:
     - docker run -v /var/run/docker.sock:/run/docker.sock -v /home/ubuntu:/home/go weaveworks/weave-build:
         parallel: true
-    - cd $SRCDIR/test; ./gce.sh setup:
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then cd $SRCDIR/test; ./gce.sh setup; fi:
         parallel: true
-    - cd $SRCDIR/test; . ./gce.sh hosts; ./setup.sh:
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then cd $SRCDIR/test; . ./gce.sh hosts; ./setup.sh; fi:
         parallel: true
-    - cd $SRCDIR/test; . ./gce.sh hosts; ./run_all.sh:
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then cd $SRCDIR/test; . ./gce.sh hosts; ./run_all.sh; fi:
         parallel: true
   post:
-    - cd $SRCDIR/test; ./gce.sh destroy:
+    - if [ "$CIRCLE_PROJECT_USERNAME" == "weaveworks" ]; then cd $SRCDIR/test; ./gce.sh destroy; fi:
         parallel: true
+    - cd $SRCDIR; cp coverage.html $CIRCLE_ARTIFACTS
