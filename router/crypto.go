@@ -1,7 +1,7 @@
 package router
 
 import (
-	"code.google.com/p/go-bit/bit"
+	"github.com/google/go-bit/bit"
 	"code.google.com/p/go.crypto/nacl/box"
 	"code.google.com/p/go.crypto/nacl/secretbox"
 	"crypto/rand"

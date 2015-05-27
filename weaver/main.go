@@ -1,7 +1,7 @@
 package main
 
 import (
-	"code.google.com/p/gopacket/layers"
+	"github.com/google/gopacket/layers"
 	"crypto/sha256"
 	"flag"
 	"fmt"

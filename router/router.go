@@ -2,7 +2,7 @@ package router
 
 import (
 	"bytes"
-	"code.google.com/p/gopacket/layers"
+	"github.com/google/gopacket/layers"
 	"encoding/binary"
 	"fmt"
 	"io"

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"code.google.com/p/gopacket/pcap"
+	"github.com/google/gopacket/pcap"
 	"fmt"
 )
 
